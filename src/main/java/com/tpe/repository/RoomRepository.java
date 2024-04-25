@@ -1,7 +1,6 @@
 package com.tpe.repository;
 
 import com.tpe.config.HibernateUtils;
-import com.tpe.domain.Hotel;
 import com.tpe.domain.Room;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -11,57 +10,65 @@ import java.util.List;
 
 public class RoomRepository {
 
-    //ÖDEV save, findByID, findAll yapılacak. Hotel Repository de örneği var...
-
+    //ÖDEV: save, findById, findAll
     private Session session;
 
+    //4-c
     public void save(Room room) {
-        //1b repository de hotel bağlantı işlemi
-        try {
-            session = HibernateUtils.getSessionFactory().openSession();   //bir oturum oluşturduk
 
-            Transaction transaction = session.beginTransaction(); //kaydetme işlemini bir transaction içine alıyoruz ki hata olursa işlemi hiç yapmamış olsun...
-            session.save(room);    //insert into hotel
+        try {
+            session = HibernateUtils.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            session.save(room);
             transaction.commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }finally {
+            HibernateUtils.closeSession(session);
 
+        }
+    }
+
+    //5-c
+
+    public Room findById(Long roomId) {
+        try {
+            session = HibernateUtils.getSessionFactory().openSession();
+            Room room=session.get(Room.class, roomId);
+            return room;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }finally {
+            HibernateUtils.closeSession(session);
+        }
+        return null;
+    }
+
+    //6-c
+    public List<Room> findAll() {
+        try {
+            session = HibernateUtils.getSessionFactory().openSession();
+            List<Room> rooms = session.createQuery("FROM Room", Room.class).getResultList();
+            return rooms;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            HibernateUtils.closeSession(session);   //her durumda oturumu kapatıyoruz...
+            e.printStackTrace();
+            return null;
+        }finally {
+            HibernateUtils.closeSession(session);
         }
     }
 
-    //2-b
-    public Room findById(Long id) {
-
+    // ödev1
+    public void delete(Room room ) {
         try {
             session = HibernateUtils.getSessionFactory().openSession();
-            //select * from t_room where id=pId
-            session.get(Room.class, id);   //Room room = session.get(Room.class,id); şeklinde kullanacaksak return room; yazmalıydık
-
-            return session.get(Room.class,id);
-
-        } catch (HibernateException e) {
-            System.out.println(e.getMessage());
-        } finally {
+            Transaction transaction = session.beginTransaction();
+            session.delete(room);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
             HibernateUtils.closeSession(session);
         }
-        return null;
-    }
-
-    //3-b
-    public List<Room> findAll(){
-        try {
-            session = HibernateUtils.getSessionFactory().openSession();
-            //select * from t_hotel
-            List<Room> roomList = session.createQuery("FROM Room",Room.class).getResultList();  //parametre olarak HQL alır SQL değil : SELECT yazmaya gerek yok yani ama class ismi yazılmalı
-            return roomList;
-
-        } catch (HibernateException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            HibernateUtils.closeSession(session);
-        }
-        return null;
     }
 }

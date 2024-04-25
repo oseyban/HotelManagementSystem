@@ -6,6 +6,3 @@ public class HotelNotFoundException extends RuntimeException {
     }
 }
 
-// ödev RoomNotFoundExceptior
-//ReservationNotFoundException
-//guestNotFoundException

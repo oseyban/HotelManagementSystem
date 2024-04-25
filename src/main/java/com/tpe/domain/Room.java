@@ -1,37 +1,40 @@
 package com.tpe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="t_room")
+@Table(name = "t_room")
 public class Room {
 
     @Id
-    private Long id;
+    private Long id;//PK
+
     @Column(nullable = false)
     private String number;
+
     @Column(nullable = false)
-    private int capasity;
+    private Integer capacity;
 
-    //todo : many-to-one
-    private Hotel hotel;        //oda hangi otele ait
+    //todo:  many-to-one
+    @ManyToOne//room ile hotel arasında ilişki kurulmasını sağlar:room tablosuna FK(hotel_id) ekler
+    @JoinColumn(name = "hotel_id",nullable = false)//opsiyonel
+    private Hotel hotel;
 
-    //todo : one-to-many
+    //todo: one-to-many
+    //n02: comment
+    @OneToMany(mappedBy = "room",orphanRemoval = true)
     private List<Reservation> reservations=new ArrayList<>();
 
-    public Room(Long id, String number, int capasity, Hotel hotel) {
-        this.id = id;
-        this.number = number;
-        this.capasity = capasity;
-        this.hotel = hotel;
+    public Room() {
     }
 
-    public Room() { //parametreli consructer oluşturduysak parametresiz de oluşturulmalı
+    public Room(Long id, String number, Integer capacity, Hotel hotel) {
+        this.id = id;
+        this.number = number;
+        this.capacity = capacity;
+        this.hotel = hotel;
     }
 
     //getter-setter
@@ -52,12 +55,12 @@ public class Room {
         this.number = number;
     }
 
-    public int getCapasity() {
-        return capasity;
+    public Integer getCapacity() {
+        return capacity;
     }
 
-    public void setCapasity(int capasity) {
-        this.capasity = capasity;
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
     }
 
     public Hotel getHotel() {
@@ -76,17 +79,14 @@ public class Room {
         this.reservations = reservations;
     }
 
-    //toString override
-
+    //toString
 
     @Override
     public String toString() {
         return "Room{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
-                ", capasity=" + capasity +
-                //", hotel=" + hotel +  otelde de room yazdırıldığı için sonsuz döngüye girer bu sebeple burada hotel yazdırmıyoruz
-                ", reservations=" + reservations +
+                ", capacity=" + capacity +
                 '}';
     }
 }

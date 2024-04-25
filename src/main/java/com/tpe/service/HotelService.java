@@ -71,4 +71,36 @@ public class HotelService {
             System.out.println("Hotel list is empty");
         }
     }
+
+    //7-b
+    public void deleteHotel(Long hotelId) {
+        Hotel foundHotel=findHotelById(hotelId);
+
+        if(foundHotel!=null){
+            System.out.println(foundHotel);
+            System.out.println("Are you sure to delete? ");
+            System.out.println("Please answer Y or N");
+            String select=scanner.nextLine();
+            if(select.equalsIgnoreCase("Y")){
+                hotelRepository.delete(foundHotel);
+                System.out.println("Hotel is deleted SUCCESSFULLY");
+            } else {
+                System.out.println("Delete operation is CANCELLED!");
+            }
+        }
+    }
+
+    public void updateHotelById(Long updatedHotelId) {
+        Hotel existingHotel=findHotelById(updatedHotelId);
+
+        if (existingHotel!=null){
+            System.out.println("Enter the new hotel name");
+            existingHotel.setName(scanner.nextLine());
+            System.out.println("Enter the new location");
+            existingHotel.setLocation(scanner.nextLine());
+
+            hotelRepository.updateHotel(existingHotel);
+            System.out.println("Hotel is updated");
+        }
+    }
 }

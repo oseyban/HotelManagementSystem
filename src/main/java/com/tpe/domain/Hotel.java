@@ -1,35 +1,49 @@
 package com.tpe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="t_hotel")      //tablonun ismini belirlemek için
+@Table(name = "t_hotel")
 public class Hotel {
-    @Id //primary Key
+
+    @Id//primary key
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String location;
 
-    //todo : one to many oluşturulacak
+    //orphanRemoval
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tabledan 11 i siler
+
+    //cascade:
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tableda 11 hala var
+
+
+    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)//hotel ile room arasında ilişki kurulmasını sağlar: ilişki tablosu ekler. Fetch Type OneToMany lerde Lazy dir.
     private List<Room> rooms=new ArrayList<>();
 
-    //parametreli constructer
+    //hibernate data çekerken(fetch) default constructorı kullanır.
+    public Hotel() {
+    }
+
+    //param const
+
     public Hotel(Long id, String name, String location) {
         this.id = id;
         this.name = name;
         this.location = location;
     }
 
-    public Hotel() {    //parametreli consructer oluşturulduğunda mutlaka hibernate için
-    }                   //default constructer ı yeniden oluşturmalıyız. Çünkü hibernate veri çekerken bunu kullanır.
-//getter-setter
+
+    //getter-setter
+
 
     public Long getId() {
         return id;

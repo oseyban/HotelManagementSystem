@@ -39,7 +39,6 @@ public class HibernateUtils {
 
     //SF kapatalım
     public static void shutDown(){
-
         getSessionFactory().close();
 
     }

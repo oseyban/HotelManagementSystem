@@ -61,4 +61,37 @@ public class HotelRepository {
         }
         return null;
     }
+
+    //7-c
+    public void delete(Hotel hotel) {
+        try {
+            session = HibernateUtils.getSessionFactory().openSession();   //bir oturum oluşturduk
+            Transaction transaction = session.beginTransaction(); //kaydetme işlemini bir transaction içine alıyoruz ki hata olursa işlemi hiç yapmamış olsun...
+
+            session.delete(hotel);    //insert into hotel
+            transaction.commit();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            HibernateUtils.closeSession(session);   //her durumda oturumu kapatıyoruz...
+        }
+    }
+
+    //8-c todo
+    public void updateHotel(Hotel existingHotel) {
+        try {
+            session = HibernateUtils.getSessionFactory().openSession();   //bir oturum oluşturduk
+            Transaction transaction = session.beginTransaction(); //kaydetme işlemini bir transaction içine alıyoruz ki hata olursa işlemi hiç yapmamış olsun...
+
+            session.update(existingHotel);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            HibernateUtils.closeSession(session);   //her durumda oturumu kapatıyoruz...
+        }
+    }
 }
