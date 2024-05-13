@@ -12,6 +12,7 @@ import com.tpe.repository.ReservationRepository;
 import org.hibernate.Transaction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
@@ -22,9 +23,7 @@ public class ReservationService {
     private Scanner scanner=new Scanner(System.in);
 
     private ReservationRepository reservasyonRepository;
-
     private final GuestService guestService;
-
     private final RoomService roomService;
 
     public ReservationService(ReservationRepository reservationRepository, GuestService guestService, RoomService roomService){
@@ -33,27 +32,48 @@ public class ReservationService {
         this.roomService = roomService;
     }
 
-    public void saveReservation(){
+    public void saveReservation() {
+        Scanner scanner = new Scanner(System.in);
 
-        Reservation reservation=new Reservation();
-        //Hotel hotel=new Hotel();
+        // Yeni bir rezervasyon nesnesi oluştur
+        Reservation reservation = new Reservation();
 
+        // Rezervasyon ID'sini giriş al
         System.out.println("Enter reservation ID");
-        reservation.setId( scanner.nextLong());
-        scanner.nextLine();         // int gibi alt satıra geçmez elle alt satıra geçirmesini sağladık
+        reservation.setId(scanner.nextLong());
+        scanner.nextLine(); // Scanner'ı temizle
 
-        System.out.println("Enter reservation name");
-        //reservation.setName(scanner.nextLine());
+        // Check-in tarihini al
+        System.out.println("Enter CheckIn Date (yyyy-MM-dd)");
+        String checkInDateString = scanner.nextLine();
+        LocalDate checkInDate = LocalDate.parse(checkInDateString);
+        reservation.setCheckInDate(checkInDate);
 
-        System.out.println("Enter reservation contact");
-        //reservation.setContact(scanner.nextLine());
+        // Check-out tarihini al
+        System.out.println("Enter CheckOut Date (yyyy-MM-dd)");
+        String checkOutDateString = scanner.nextLine();
+        LocalDate checkOutDate = LocalDate.parse(checkOutDateString);
+        reservation.setCheckOutDate(checkOutDate);
 
-        System.out.println("Enter reservation information");
-        //reservation.setInformation(scanner.nextLine());
+        // Misafir bilgilerini al
+        System.out.println("Reservasyon yapılacak  kişinin id bilgisini girin");
+        guestService.findAllGuest();
+        Long id=scanner.nextLong();
+        Guest guest = guestService.findGuestById(id);
+        reservation.setGuest(guest);
 
+        // Oda bilgilerini al
+        System.out.println("Reservasyon yapılacak  odanın id bilgisini girin");
+        roomService.getAllRooms();
+        Long roomid=scanner.nextLong();
+        Room room = roomService.findRoomById(roomid);
+        reservation.setRoom(room);
+
+        // Rezervasyonu kaydet
         reservasyonRepository.save(reservation);
 
-        System.out.println("reservation ID = " + reservation.getId());;
+
+        System.out.println("Reservation ID = " + reservation.getId());
     }
 
     public Reservation findReservationById(Long id){

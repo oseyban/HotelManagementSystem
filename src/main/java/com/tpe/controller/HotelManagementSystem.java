@@ -276,7 +276,7 @@ public class HotelManagementSystem {
             switch (choice) {
                 case 1:
                     //11-a: reservation oluşturma
-                    reservationService.createReservation();
+                    reservationService.saveReservation();
 
                     break;
                 case 2:
