@@ -1,0 +1,23 @@
+LibraryManagementSystem
+ A-Book Endpoints
+ //1- Save a Book
+ // http://localhost:8080/books + POST
+
+//2- Get All Books
+// http://localhost:8080/books + GET
+//3- Get a Book by its ID
+// http://localhost:8080/books/2 + GET
+//4- Delete a Book by its ID
+// http://localhost:8080/books/2 + DELETE
+//5- Get a Book by its ID with RequestParam
+// http://localhost:8080/books/q?id=2
+//6- Get a Book by its Title with RequestParam
+//http://localhost:8080/books/search?title=Atomic Habits
+
+//7- Get Books With Page
+// http://localhost:8080/books/s?page=1&size=2&sort=publicationDate&direction=ASC
+
+//8- Update a Book With Using DTO
+// http://localhost:8080/books/update/2
+//9- Get a Book By Its Author Using JPQL
+// http://localhost:8080/books/a?author=AB

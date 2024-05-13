@@ -1,6 +1,7 @@
 package com.tpe.domain;
 
 import com.tpe.service.RoomService;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class Reservation {
 
     //todo : auto generated
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
